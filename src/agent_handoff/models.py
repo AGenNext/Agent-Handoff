@@ -23,14 +23,35 @@ class HandoffStatus(StrEnum):
 class HandoffIntent(BaseModel):
     type: str
     priority: str = "normal"
-    summary: str | None = None
+    summary: str
+
+
+class HandoffTask(BaseModel):
+    id: str
+    title: str
+    objective: str
+    expected_output: dict[str, Any]
+    constraints: list[str] = Field(default_factory=list)
 
 
 class HandoffContext(BaseModel):
-    memory_refs: list[str] = Field(default_factory=list)
-    trace_refs: list[str] = Field(default_factory=list)
-    artifacts: list[str] = Field(default_factory=list)
-    payload: dict[str, Any] = Field(default_factory=dict)
+    memory_refs: list[str]
+    trace_refs: list[str]
+    artifacts: list[str]
+    payload: dict[str, Any]
+
+
+class HandoffEnvironment(BaseModel):
+    environment_id: str
+    runtime_profile: str
+    target: dict[str, Any]
+    variables: dict[str, Any] = Field(default_factory=dict)
+
+
+class HandoffKnowledge(BaseModel):
+    knowledge_refs: list[str]
+    rag_query: str | None = None
+    facts: dict[str, Any] = Field(default_factory=dict)
 
 
 class HandoffPermissions(BaseModel):
@@ -45,7 +66,10 @@ class A2AHandoff(BaseModel):
     workflow_id: str
     run_id: str
     intent: HandoffIntent
-    context: HandoffContext = Field(default_factory=HandoffContext)
+    task: HandoffTask
+    context: HandoffContext
+    environment: HandoffEnvironment
+    knowledge: HandoffKnowledge
     permissions: HandoffPermissions = Field(default_factory=HandoffPermissions)
     mode: HandoffMode = HandoffMode.DELEGATE
     status: HandoffStatus = HandoffStatus.REQUESTED
