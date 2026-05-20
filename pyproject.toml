@@ -1,0 +1,8 @@
+[project]
+name = "agent-handoff"
+version = "0.1.0"
+description = "A2A handoff contracts and runtime helpers for AGenNext"
+requires-python = ">=3.11"
+dependencies = [
+  "pydantic>=2.7.0"
+]
