@@ -54,6 +54,13 @@ class HandoffKnowledge(BaseModel):
     facts: dict[str, Any] = Field(default_factory=dict)
 
 
+class HandoffCapabilities(BaseModel):
+    required_skills: list[str]
+    required_tools: list[str]
+    missing_skills: list[str] = Field(default_factory=list)
+    missing_tools: list[str] = Field(default_factory=list)
+
+
 class HandoffPermissions(BaseModel):
     approval_required: bool = False
     required_roles: list[str] = Field(default_factory=list)
@@ -70,6 +77,7 @@ class A2AHandoff(BaseModel):
     context: HandoffContext
     environment: HandoffEnvironment
     knowledge: HandoffKnowledge
+    capabilities: HandoffCapabilities
     permissions: HandoffPermissions = Field(default_factory=HandoffPermissions)
     mode: HandoffMode = HandoffMode.DELEGATE
     status: HandoffStatus = HandoffStatus.REQUESTED
